@@ -1,0 +1,15 @@
+C:\Users\Jose Morales\Hola\obj\Debug\net7.0\Hola.csproj.AssemblyReference.cache
+C:\Users\Jose Morales\Hola\obj\Debug\net7.0\Hola.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Jose Morales\Hola\obj\Debug\net7.0\Hola.AssemblyInfoInputs.cache
+C:\Users\Jose Morales\Hola\obj\Debug\net7.0\Hola.AssemblyInfo.cs
+C:\Users\Jose Morales\Hola\obj\Debug\net7.0\Hola.csproj.CoreCompileInputs.cache
+C:\Users\Jose Morales\Hola\bin\Debug\net7.0\Hola.exe
+C:\Users\Jose Morales\Hola\bin\Debug\net7.0\Hola.deps.json
+C:\Users\Jose Morales\Hola\bin\Debug\net7.0\Hola.runtimeconfig.json
+C:\Users\Jose Morales\Hola\bin\Debug\net7.0\Hola.dll
+C:\Users\Jose Morales\Hola\bin\Debug\net7.0\Hola.pdb
+C:\Users\Jose Morales\Hola\obj\Debug\net7.0\Hola.dll
+C:\Users\Jose Morales\Hola\obj\Debug\net7.0\refint\Hola.dll
+C:\Users\Jose Morales\Hola\obj\Debug\net7.0\Hola.pdb
+C:\Users\Jose Morales\Hola\obj\Debug\net7.0\Hola.genruntimeconfig.cache
+C:\Users\Jose Morales\Hola\obj\Debug\net7.0\ref\Hola.dll
