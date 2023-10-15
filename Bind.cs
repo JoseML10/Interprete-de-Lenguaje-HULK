@@ -1,3 +1,4 @@
+using System.Security.AccessControl;
 using Microsoft.Win32.SafeHandles;
 using System.Reflection.Metadata.Ecma335;
 using System.Diagnostics.SymbolStore;
@@ -180,7 +181,7 @@ namespace Project.Binding
    internal class BoundBinaryOperator
    {
   
-     public BoundBinaryOperator ( Token.TokenType syntaxkind , BoundBinaryOperatorKind kind , Type type):this
+     public BoundBinaryOperator ( Token.TokenType syntaxkind , BoundBinaryOperatorKind kind , Type type ):this
      (syntaxkind , kind , type , type , type )
      {}
 
@@ -208,7 +209,7 @@ namespace Project.Binding
       new BoundBinaryOperator(Token.TokenType.OperadorDistinto, BoundBinaryOperatorKind.Distinto , typeof(int) ,typeof(bool)),
       new BoundBinaryOperator(Token.TokenType.Disyuncion, BoundBinaryOperatorKind.OLogico, typeof(bool)),
       new BoundBinaryOperator(Token.TokenType.Conjuncion, BoundBinaryOperatorKind.YLogico , typeof(bool)),
-      new BoundBinaryOperator(Token.TokenType.OperadorIgual, BoundBinaryOperatorKind.Igual, typeof(bool)),
+      new BoundBinaryOperator(Token.TokenType.OperadorComparacion, BoundBinaryOperatorKind.Igual, typeof(bool)),
       new BoundBinaryOperator(Token.TokenType.OperadorDistinto, BoundBinaryOperatorKind.Distinto , typeof(bool)),
 
     };
@@ -218,7 +219,7 @@ namespace Project.Binding
     
       foreach ( var op in operadores )
       {
-        if(op.SyntaxKind==type && op.LeftType==lefttype && op.RigthType==rigthtype)
+        if(op.SyntaxKind==type && op.LeftType==lefttype || op.RigthType==rigthtype)
         {
           return op;
         }
@@ -487,7 +488,6 @@ internal sealed class BoundIfExpression : BoundExpression
         }
         else
         {
-         
          var boundOperator = BoundBinaryOperator.Bind(syntax.Operador.Kind , boundleft.Type , boundRight.Type);
          return new BoundBinaryExpression (boundleft , boundOperator, boundRight);
         }

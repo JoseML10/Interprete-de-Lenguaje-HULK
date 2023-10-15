@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Jose Morales\\Hola\\Hola.csproj": {}
+    "C:\\JM\\Interprete de Lenguaje HULK\\Hola.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Jose Morales\\Hola\\Hola.csproj": {
+    "C:\\JM\\Interprete de Lenguaje HULK\\Hola.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Jose Morales\\Hola\\Hola.csproj",
+        "projectUniqueName": "C:\\JM\\Interprete de Lenguaje HULK\\Hola.csproj",
         "projectName": "Hola",
-        "projectPath": "C:\\Users\\Jose Morales\\Hola\\Hola.csproj",
+        "projectPath": "C:\\JM\\Interprete de Lenguaje HULK\\Hola.csproj",
         "packagesPath": "C:\\Users\\Jose Morales\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Jose Morales\\Hola\\obj\\",
+        "outputPath": "C:\\JM\\Interprete de Lenguaje HULK\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

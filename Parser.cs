@@ -152,7 +152,9 @@ sealed class NumberToken : Expression
     }
     public Token Number {get;}
 
-    public int Value {get;}
+    public dynamic Value {get;}
+
+    public Type TypeNumber {get{return Value.Type;}}
     
 
     public override IEnumerable<Node> GetChildren()
@@ -200,8 +202,6 @@ public sealed class NameExpression : Expression
 
    public Token Identifier {get;}
 
-   
-
    public override Token.TokenType Kind{get{return Token.TokenType.NameExpression;}}
 
    public override IEnumerable<Node> GetChildren()
@@ -210,6 +210,7 @@ public sealed class NameExpression : Expression
    }
 
 }
+
 
 public sealed class AssignmentExpression : Expression 
 {

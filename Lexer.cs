@@ -164,27 +164,31 @@ namespace Project
                 else if (Char.IsDigit(Current))
                 {
 
-                    var start = position ;
+                   string number =  GetNumber();
+                   tokens.Add(new Token (Token.TokenType.Numero , number));
+                   
+
+                    // var start = position ;
                     
-                    while(Char.IsDigit(Current))
-                    {
-                        position++;     
-                    }
+                    // while(Char.IsDigit(Current))
+                    // {
+                    //     position++;     
+                    // }
 
-                    var length = position - start ;
-                    var text = code.Substring ( start , length  );
+                    // var length = position - start ;
+                    // var text = code.Substring ( start , length  );
 
-                    if(!int.TryParse ( text , out var value))
-                    {
+                    // if(!int.TryParse ( text , out var value))
+                    // {
 
-                        erroreslex.Add($"El numero {text} no puede ser representado por Int ");
-                    }
-                    else
-                    {
+                    //     erroreslex.Add($"El numero {text} no puede ser representado por Int ");
+                    // }
+                    // else
+                    // {
                         
-                        tokens.Add(new Token ( Token.TokenType.Numero , text ));
+                    //     tokens.Add(new Token ( Token.TokenType.Numero , text ));
                         
-                    }
+                    // }
 
 
 

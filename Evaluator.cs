@@ -55,24 +55,24 @@ namespace Project.Binding
        if(root is BoundBinaryExpression b )
        {
           
-          var left =  EvaluateExpression ( b.Left);
-          var right =  EvaluateExpression (b.Right);
+          dynamic left =  EvaluateExpression ( b.Left);
+          dynamic right =  EvaluateExpression (b.Right);
            
           switch (b.Op.Kind)
           {
 
             case  BoundBinaryOperatorKind.Adition :
-            return (int) left + (int) right ; 
+            return  left + right ; 
             case BoundBinaryOperatorKind.Substraction :
-            return (int) left - (int)right ;
+            return left - right ;
             case BoundBinaryOperatorKind.Multiplication :
-            return (int) left* (int)right;
+            return  left* right;
             case BoundBinaryOperatorKind.Division :
-            return (int) left / (int) right ;
+            return  left /  right ;
             case BoundBinaryOperatorKind.OLogico :
-            return (bool) left || (bool)right;
+            return  left || right;
             case BoundBinaryOperatorKind.YLogico :
-            return (bool) left && (bool) right ;
+            return  left &&  right ;
             case BoundBinaryOperatorKind.Igual :
             return Equals(left,right) ;
             case BoundBinaryOperatorKind.Distinto :
@@ -155,7 +155,11 @@ namespace Project.Binding
        
        if(root is BoundVariableExpression m)
        {
-         if(Variables.ContainsKey(m.Name))
+         if(m.Name=="PI")
+         {
+          return Math.PI;
+         }
+         else if(Variables.ContainsKey(m.Name))
          {
            var result = EvaluateExpression(Variables[m.Name]);
            return result;
