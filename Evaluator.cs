@@ -59,11 +59,6 @@ namespace Project.Binding
      
        if(root is BoundBinaryExpression b )
        {
-          // BoundCallFuncionExpression jji = (BoundCallFuncionExpression)b.Left;
-          // BoundCallFuncionExpression jjo = (BoundCallFuncionExpression)b.Right;
-          // Console.WriteLine(b.Op.Kind);
-          // Console.WriteLine(jji.Parametros[0].Kind);
-          // Console.WriteLine(jjo.Parametros[0].Kind);
           
           dynamic left =  EvaluateExpression ( b.Left);
           dynamic right = EvaluateExpression (b.Right);
@@ -164,18 +159,6 @@ namespace Project.Binding
        if(root is BoundFuncionExpression w)
        {
            Funciones.Add(w.Name.Value , w);
-          //  BoundIfExpression hola = (BoundIfExpression)w.Body;
-          //  BoundBinaryExpression holis = (BoundBinaryExpression)hola.ThenEx;
-          //  BoundCallFuncionExpression jjjjj=(BoundCallFuncionExpression)holis.Left;
-          //  BoundCallFuncionExpression js=(BoundCallFuncionExpression)holis.Right;
-          //  Console.WriteLine(jjjjj.Parametros[0].Kind);
-          //  BoundBinaryExpression ho = (BoundBinaryExpression)jjjjj.Parametros[0];
-          //  BoundBinaryExpression hos = (BoundBinaryExpression)js.Parametros[0];
-          //  Console.WriteLine(ho.Left.Kind);
-          //  Console.WriteLine(ho.Right.Kind);
-          //  Console.WriteLine(hos.Left.Kind);
-          //  Console.WriteLine(hos.Right.Kind);
-           
            return null;
            
        }
