@@ -28,3 +28,18 @@ C:\JM\PROYECTO__\Interprete-de-Lenguaje-HULK-master\obj\Debug\net7.0\refint\Hola
 C:\JM\PROYECTO__\Interprete-de-Lenguaje-HULK-master\obj\Debug\net7.0\Hola.pdb
 C:\JM\PROYECTO__\Interprete-de-Lenguaje-HULK-master\obj\Debug\net7.0\Hola.genruntimeconfig.cache
 C:\JM\PROYECTO__\Interprete-de-Lenguaje-HULK-master\obj\Debug\net7.0\ref\Hola.dll
+C:\JM\AQUI ES\Interprete-de-Lenguaje-HULK-master\bin\Debug\net7.0\Hola.exe
+C:\JM\AQUI ES\Interprete-de-Lenguaje-HULK-master\bin\Debug\net7.0\Hola.deps.json
+C:\JM\AQUI ES\Interprete-de-Lenguaje-HULK-master\bin\Debug\net7.0\Hola.runtimeconfig.json
+C:\JM\AQUI ES\Interprete-de-Lenguaje-HULK-master\bin\Debug\net7.0\Hola.dll
+C:\JM\AQUI ES\Interprete-de-Lenguaje-HULK-master\bin\Debug\net7.0\Hola.pdb
+C:\JM\AQUI ES\Interprete-de-Lenguaje-HULK-master\obj\Debug\net7.0\Hola.csproj.AssemblyReference.cache
+C:\JM\AQUI ES\Interprete-de-Lenguaje-HULK-master\obj\Debug\net7.0\Hola.GeneratedMSBuildEditorConfig.editorconfig
+C:\JM\AQUI ES\Interprete-de-Lenguaje-HULK-master\obj\Debug\net7.0\Hola.AssemblyInfoInputs.cache
+C:\JM\AQUI ES\Interprete-de-Lenguaje-HULK-master\obj\Debug\net7.0\Hola.AssemblyInfo.cs
+C:\JM\AQUI ES\Interprete-de-Lenguaje-HULK-master\obj\Debug\net7.0\Hola.csproj.CoreCompileInputs.cache
+C:\JM\AQUI ES\Interprete-de-Lenguaje-HULK-master\obj\Debug\net7.0\Hola.dll
+C:\JM\AQUI ES\Interprete-de-Lenguaje-HULK-master\obj\Debug\net7.0\refint\Hola.dll
+C:\JM\AQUI ES\Interprete-de-Lenguaje-HULK-master\obj\Debug\net7.0\Hola.pdb
+C:\JM\AQUI ES\Interprete-de-Lenguaje-HULK-master\obj\Debug\net7.0\Hola.genruntimeconfig.cache
+C:\JM\AQUI ES\Interprete-de-Lenguaje-HULK-master\obj\Debug\net7.0\ref\Hola.dll
