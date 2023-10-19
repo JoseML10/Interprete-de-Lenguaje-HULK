@@ -12,7 +12,7 @@ using System.Reflection;
 
 
 
-namespace Project
+namespace Project.Binding
 {
 
 
@@ -49,6 +49,7 @@ namespace Project
             PuntoComa,
             FirstParent,
 
+            OperadorFuncionSimple,
             OperadorCadenaAux,
             LastParent,
             LlaveAbierta,
@@ -66,7 +67,10 @@ namespace Project
 
             InExpression,
             PalabraReservada,
-            OperadorComparacion,
+            OperadorComparacionMayor,
+            OperadorComparacionMenor,
+            OperadorComparacionMayorIgual,
+            OperadorComparacionMenorIgual,
 
             AssignmentExpression,
 
@@ -163,11 +167,8 @@ namespace Project
 
                 else if (Char.IsDigit(Current))
                 {
-
-                   string number =  GetNumber();
-                   tokens.Add(new Token (Token.TokenType.Numero , number));
-                   
-
+                    string number = GetNumber();
+                    tokens.Add(new Token ( Token.TokenType.Numero ,number ));
                     // var start = position ;
                     
                     // while(Char.IsDigit(Current))
@@ -214,6 +215,10 @@ namespace Project
                     else if (identifier=="if")
                     {
                         tokens.Add(new Token(Token.TokenType.OperadorIf, identifier));
+                    }
+                    else if(IsMathFunction(identifier))
+                    {
+                        tokens.Add(new Token(Token.TokenType.OperadorFuncionSimple, identifier));
                     }
                     else
                     {
@@ -338,13 +343,13 @@ namespace Project
                             if (Next() == '=')
                             {
 
-                                tokens.Add(new Token(Token.TokenType.OperadorComparacion, "<="));
+                                tokens.Add(new Token(Token.TokenType.OperadorComparacionMenorIgual, "<="));
                                position += 2;
                             }
                             else
                             {
 
-                                tokens.Add(new Token(Token.TokenType.OperadorComparacion, "<"));
+                                tokens.Add(new Token(Token.TokenType.OperadorComparacionMenor, "<"));
                                position++;
                             }
 
@@ -354,13 +359,13 @@ namespace Project
                             if (Next() == '=')
                             {
 
-                                tokens.Add(new Token(Token.TokenType.OperadorComparacion, ">="));
+                                tokens.Add(new Token(Token.TokenType.OperadorComparacionMayorIgual, ">="));
                                 position += 2;
                             }
 
                             else
                             {
-                                tokens.Add(new Token(Token.TokenType.OperadorComparacion, " >"));
+                                tokens.Add(new Token(Token.TokenType.OperadorComparacionMayor, " >"));
                                position++;
                             }
                             break;
@@ -464,17 +469,35 @@ namespace Project
                 case "function":
                     
                 case "else":
-                    
+
                return true;
-
-
 
                 default:
 
-                  return   false;
+              return   false;
+            }
 
+        }
 
+         private bool IsMathFunction(string identifier)
+        {
+            switch (identifier)
+            {
+                case "tan":
+                
+                case "cot":
+                    
+                case "sen":
 
+                case "cos":
+
+                case "log":
+
+               return true;
+
+                default:
+
+              return   false;
             }
 
         }

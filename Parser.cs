@@ -17,8 +17,10 @@ using System.Data;
 using System.Security;
 using System.Linq.Expressions;
 using Project.Binding;
+using System.Globalization;
 using System.Collections;
 using System.Transactions;
+using System.Net;
 
 namespace Project
 {
@@ -139,7 +141,8 @@ sealed class NumberToken : Expression
     public NumberToken(Token number)
     {
       Number = number ;
-      Value = int.Parse(number.Value);
+      CultureInfo culture = new CultureInfo("en-US");
+      Value = decimal.Parse(number.Value , culture );
     }
 
     public override Token.TokenType Kind 
@@ -152,9 +155,7 @@ sealed class NumberToken : Expression
     }
     public Token Number {get;}
 
-    public dynamic Value {get;}
-
-    public Type TypeNumber {get{return Value.Type;}}
+    public decimal Value {get;}
     
 
     public override IEnumerable<Node> GetChildren()
@@ -166,7 +167,7 @@ sealed class NumberToken : Expression
     
 }
 
-sealed class BinaryExpression :Expression 
+public sealed class BinaryExpression :Expression 
 {
   public BinaryExpression (Expression left , Token operador , Expression right )
 {
@@ -193,6 +194,34 @@ public override IEnumerable<Node> GetChildren()
 }
 
 
+public sealed class MathExpression : Expression
+{
+
+  public MathExpression (Token identificador , Token openpar , Expression expression , Token closepar)
+  {
+    Identificador=identificador;
+    OpenPar=openpar;
+    Expression=expression;
+    ClosePar=closepar;
+  }
+
+  public Token Identificador {get;}
+  public Token OpenPar{get;}
+
+  public Expression Expression {get;}
+
+  public Token ClosePar{get;}
+
+  public override Token.TokenType Kind{get{return Token.TokenType.OperadorFuncionSimple;}}
+
+   public override IEnumerable<Node> GetChildren()
+   {
+    yield return Identificador ;
+    yield return Expression;
+   }
+}
+
+
 public sealed class NameExpression : Expression 
 {
    public NameExpression (Token identifier)
@@ -202,6 +231,8 @@ public sealed class NameExpression : Expression
 
    public Token Identifier {get;}
 
+   
+
    public override Token.TokenType Kind{get{return Token.TokenType.NameExpression;}}
 
    public override IEnumerable<Node> GetChildren()
@@ -210,7 +241,6 @@ public sealed class NameExpression : Expression
    }
 
 }
-
 
 public sealed class AssignmentExpression : Expression 
 {
@@ -241,15 +271,15 @@ public sealed class AssignmentExpression : Expression
 public sealed class InExpression : Expression 
 {
 
-  public InExpression (AssignmentExpression variable , Token operador_in ,  Expression expression)
+  public InExpression (List<AssignmentExpression> variables , Token operador_in ,  Expression expression)
   {
-    Variable=variable;
+    Variables=variables;
     OperadorIn = operador_in ;
     Expression = expression ;
 
   }
 
-  public AssignmentExpression Variable {get;}
+  public List<AssignmentExpression> Variables {get;}
   public Expression Expression {get;}
 
   public Token OperadorIn {get;}
@@ -258,7 +288,6 @@ public sealed class InExpression : Expression
 
    public override IEnumerable<Node> GetChildren()
    {
-    yield return Variable ;
     yield return Expression ;
    }
 
@@ -523,44 +552,31 @@ private Expression ParseExpression()
 private Expression ParseAssignmentExpression()
 {
   
-  
   if(Peek(0).Kind==Token.TokenType.VariableToken && 
   Peek(1).Kind == Token.TokenType.IdentifierToken 
   && Peek(2).Kind == Token.TokenType.OperadorAsignacion )
   {
 
+    List<AssignmentExpression> variables = new List<AssignmentExpression>();
+    while(true)
+    {
     NextToken();
     var identifierToken = NextToken();
     var operadorIgual = NextToken();
     var right = ParseAssignmentExpression();
+    variables.Add(new AssignmentExpression(identifierToken,operadorIgual,right));
+
+    if(Peek(0).Kind!=Token.TokenType.Coma)
+    {
+      break;
+    }
+    }
+
     var operadorIn=NextToken();
     var expression = ParseAssignmentExpression();
-    return new InExpression(new AssignmentExpression(identifierToken , operadorIgual , right ) , operadorIn , expression);
+    return new InExpression(variables, operadorIn , expression);
   }
-  if(Peek(0).Kind==Token.TokenType.OperadorIf)
-  {
-    var operadorif=NextToken();
-    var condicion = ParseAssignmentExpression();
-    var thenEx = ParseAssignmentExpression();
-    var operadorelse =  NextToken();
-    var elsecond = ParseAssignmentExpression();
-    return new IfExpression(operadorif , condicion , thenEx , operadorelse ,elsecond);
-
-  }
-  if(Peek(0).Kind==Token.TokenType.Cadena)
-  {
-    var cadena =NextToken();
-    return new StringExpression(cadena);
-  }
-  else if(Peek(0).Value=="print")
-  {
-    var operadorprint=NextToken();
-    var openpar = NextToken();
-    var cadena = ParseAssignmentExpression();
-    var closepar=NextToken();
-    return new PrintExpression(operadorprint , openpar , cadena , closepar);
-  }
-  if (Peek(0).Value=="function")
+   if (Peek(0).Value=="function")
   {
     List<Token> parametros = new List<Token>();
      var functionword=NextToken();
@@ -581,10 +597,36 @@ private Expression ParseAssignmentExpression()
      var body = ParseAssignmentExpression();
      return new FuncionExpression(nombre , parametros , body);
   }
+  if(Peek(0).Kind==Token.TokenType.OperadorIf)
+  {
+
+    var operadorif=NextToken();
+    var condicion = ParseAssignmentExpression();
+    var thenEx = ParseAssignmentExpression();
+    var operadorelse =  NextToken();
+    var elsecond = ParseAssignmentExpression();
+    return new IfExpression(operadorif , condicion , thenEx , operadorelse ,elsecond);
+
+  }
+  
+  else if(Peek(0).Value=="print")
+  {
+    var operadorprint=NextToken();
+    var openpar = NextToken();
+    var cadena = ParseAssignmentExpression();
+    var closepar=NextToken();
+    return new PrintExpression(operadorprint , openpar , cadena , closepar);
+  }
+    var binaryExpression = ParseBinaryExpression();
+
+    if (binaryExpression != null)
+    {
+        return binaryExpression;
+    }
   if (Peek(0).Kind==Token.TokenType.IdentifierToken 
   && Peek(1).Kind==Token.TokenType.FirstParent)
   {
-
+    
     List<Expression> argumentos = new List<Expression>();
     var name = NextToken();
     var FirstParent=NextToken();
@@ -601,12 +643,28 @@ private Expression ParseAssignmentExpression()
      var closepar = NextToken();
      return new CallFuncionExpression(name , argumentos);
   }
- 
-  return ParseBinaryExpression();
+  if(Peek(0).Kind==Token.TokenType.OperadorFuncionSimple)
+  {
+    var identificador=NextToken();
+    var openpar =NextToken();
+    var expression=ParseAssignmentExpression();
+    var closepar=NextToken();
+
+    return new MathExpression(identificador,openpar,expression,closepar);
+  
+  }
+  
+  if(Peek(0).Kind==Token.TokenType.Cadena)
+  {
+    var cadena =NextToken();
+    return new StringExpression(cadena);
+  }
+   throw new InvalidOperationException("Expresión no válida");
 
 }
  private Expression ParseBinaryExpression(int parentPrecedence = 0)
 {
+
  Expression left;
 
  var unaryOperatorPrecedence = GetUnaryExpressionPrecedence(Current().Kind);
@@ -627,7 +685,6 @@ while (true)
 var precedence = GetBinaryExpressionPrecedence(Current().Kind);
 if (precedence == 0 || precedence <= parentPrecedence)
 break;
-
 var operatorToken = NextToken();
 var right = ParseBinaryExpression(precedence);
 left = new BinaryExpression( left, operatorToken, right);
@@ -656,14 +713,21 @@ private static  int GetBinaryExpressionPrecedence ( Token.TokenType kind)
   {
     case Token.TokenType.OperadorSuma:
     case Token.TokenType.OperadorResta:
-     return 4;
+    case Token.TokenType.OperadorConcat:
+    return 4;
     case Token.TokenType.OperadorMult:
     case Token.TokenType.OperadorDiv:
+    case Token.TokenType.OperadorResto:
     return 5;
     case Token.TokenType.OperadorIgual:
     case Token.TokenType.OperadorDistinto:
+    case Token.TokenType.OperadorComparacionMayor:
+    case Token.TokenType.OperadorComparacionMenor:
+    case Token.TokenType.OperadorComparacionMayorIgual:
+    case Token.TokenType.OperadorComparacionMenorIgual:
     return 3;
     case Token.TokenType.Disyuncion :
+    case Token.TokenType.OperadorPob:
     return 1;
     case Token.TokenType.Conjuncion :
     return 2;
@@ -695,7 +759,7 @@ private static  int GetBinaryExpressionPrecedence ( Token.TokenType kind)
     {
       case Token.TokenType.FirstParent :
       {
-         var left = NextToken();
+        var left = NextToken();
         var expresion = ParseExpression();
         var right = MatchToken (Token.TokenType.LastParent);
         return new ExpresionParentesis (left , expresion , right);
@@ -705,15 +769,52 @@ private static  int GetBinaryExpressionPrecedence ( Token.TokenType kind)
       case Token.TokenType.FalseToken :  
 
       {
-        var keywordToken = NextToken(); 
+      var keywordToken = NextToken(); 
       var value=keywordToken.Kind == Token.TokenType.TrueToken;
       return new NumberToken(Current());
       }
 
        case Token.TokenType.IdentifierToken :
+       {   
+         if (Peek(1).Kind==Token.TokenType.FirstParent)
+        {
+           List<Expression> argumentos = new List<Expression>();
+           var name = NextToken();
+           var FirstParent=NextToken();
+           while(Current().Kind != Token.TokenType.LastParent)
+          {
+            var parametro=ParseAssignmentExpression();
+            argumentos.Add(parametro);
+
+            if(Current().Kind==Token.TokenType.Coma)
+           {
+             NextToken(); 
+           }
+          }
+          var closepar = NextToken();
+        
+          return new CallFuncionExpression(name , argumentos);
+        }
+        else
+        {
+           var identifierToken = NextToken();
+           return  new NameExpression(identifierToken);
+        }
+        }
+ 
+       case Token.TokenType.OperadorFuncionSimple:
        {
-        var identifierToken = NextToken();
-        return  new NameExpression(identifierToken);
+        var identificador=NextToken();
+        var openpar=NextToken();
+        var expression=ParseExpression();
+        var closepar=NextToken();
+        return new MathExpression(identificador,openpar,expression,closepar);
+       }
+       case Token.TokenType.Cadena:
+       {
+          var cadena = NextToken();
+          return new StringExpression(cadena);
+
        }
        
       default :

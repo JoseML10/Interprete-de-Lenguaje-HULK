@@ -1,4 +1,3 @@
-using System.Security.AccessControl;
 using Microsoft.Win32.SafeHandles;
 using System.Reflection.Metadata.Ecma335;
 using System.Diagnostics.SymbolStore;
@@ -26,6 +25,8 @@ namespace Project.Binding
 
     PrintExpression,
     UnaryExpression,
+
+    MathExpression,
 
     FuncionExpression,
 
@@ -181,7 +182,7 @@ namespace Project.Binding
    internal class BoundBinaryOperator
    {
   
-     public BoundBinaryOperator ( Token.TokenType syntaxkind , BoundBinaryOperatorKind kind , Type type ):this
+     public BoundBinaryOperator ( Token.TokenType syntaxkind , BoundBinaryOperatorKind kind , Type type):this
      (syntaxkind , kind , type , type , type )
      {}
 
@@ -201,17 +202,23 @@ namespace Project.Binding
 
     private static BoundBinaryOperator[] operadores =
     {
-      new BoundBinaryOperator(Token.TokenType.OperadorIgual, BoundBinaryOperatorKind.Igual , typeof(int) , typeof(bool)),
-      new BoundBinaryOperator(Token.TokenType.OperadorSuma , BoundBinaryOperatorKind.Adition , typeof(int) ),
-      new BoundBinaryOperator(Token.TokenType.OperadorResta , BoundBinaryOperatorKind.Substraction , typeof(int)),
-      new BoundBinaryOperator(Token.TokenType.OperadorMult, BoundBinaryOperatorKind.Multiplication , typeof(int)),
-      new BoundBinaryOperator(Token.TokenType.OperadorDiv, BoundBinaryOperatorKind.Division , typeof(int)),
-      new BoundBinaryOperator(Token.TokenType.OperadorDistinto, BoundBinaryOperatorKind.Distinto , typeof(int) ,typeof(bool)),
+      new BoundBinaryOperator(Token.TokenType.OperadorIgual, BoundBinaryOperatorKind.Igual , typeof(decimal) , typeof(bool)),
+      new BoundBinaryOperator(Token.TokenType.OperadorSuma , BoundBinaryOperatorKind.Adition , typeof(decimal) ),
+      new BoundBinaryOperator(Token.TokenType.OperadorResta , BoundBinaryOperatorKind.Substraction , typeof(decimal)),
+      new BoundBinaryOperator(Token.TokenType.OperadorMult, BoundBinaryOperatorKind.Multiplication , typeof(decimal)),
+      new BoundBinaryOperator(Token.TokenType.OperadorPob, BoundBinaryOperatorKind.OperadorPotencia , typeof(decimal)),
+      new BoundBinaryOperator(Token.TokenType.OperadorDiv, BoundBinaryOperatorKind.Division , typeof(decimal)),
+      new BoundBinaryOperator(Token.TokenType.OperadorResto, BoundBinaryOperatorKind.RestoDivision , typeof(decimal)),
+      new BoundBinaryOperator(Token.TokenType.OperadorDistinto, BoundBinaryOperatorKind.Distinto , typeof(decimal) ,typeof(bool)),
       new BoundBinaryOperator(Token.TokenType.Disyuncion, BoundBinaryOperatorKind.OLogico, typeof(bool)),
+      new BoundBinaryOperator(Token.TokenType.OperadorConcat, BoundBinaryOperatorKind.Concatenar, typeof(string)),
       new BoundBinaryOperator(Token.TokenType.Conjuncion, BoundBinaryOperatorKind.YLogico , typeof(bool)),
-      new BoundBinaryOperator(Token.TokenType.OperadorComparacion, BoundBinaryOperatorKind.Igual, typeof(bool)),
+      new BoundBinaryOperator(Token.TokenType.OperadorIgual, BoundBinaryOperatorKind.Igual, typeof(bool)),
       new BoundBinaryOperator(Token.TokenType.OperadorDistinto, BoundBinaryOperatorKind.Distinto , typeof(bool)),
-
+      new BoundBinaryOperator(Token.TokenType.OperadorComparacionMayor, BoundBinaryOperatorKind.ComparacionMayor, typeof(decimal) , typeof(bool)),
+      new BoundBinaryOperator(Token.TokenType.OperadorComparacionMayorIgual, BoundBinaryOperatorKind.ComparacionMayorIgual, typeof(decimal) , typeof(bool)),
+      new BoundBinaryOperator(Token.TokenType.OperadorComparacionMenor, BoundBinaryOperatorKind.ComparacionMenor, typeof(decimal) ,typeof(bool)),
+      new BoundBinaryOperator(Token.TokenType.OperadorComparacionMenorIgual, BoundBinaryOperatorKind.ComparacionMenorIgual,typeof(decimal) ,typeof(bool)),
     };
 
     public static BoundBinaryOperator Bind(Token.TokenType type , Type lefttype , Type rigthtype)
@@ -219,7 +226,7 @@ namespace Project.Binding
     
       foreach ( var op in operadores )
       {
-        if(op.SyntaxKind==type && op.LeftType==lefttype || op.RigthType==rigthtype)
+        if(op.SyntaxKind==type && op.LeftType==lefttype && op.RigthType==rigthtype)
         {
           return op;
         }
@@ -262,13 +269,44 @@ namespace Project.Binding
 
     }
 
+
+     internal sealed class BoundMathExpression : BoundExpression
+   {
+      public BoundMathExpression(string identifier , BoundExpression expression)
+      {
+        Identifier = identifier ;
+        Expression = expression;
+
+      }
+      
+      public string Identifier {get;}
+      public BoundExpression Expression {get;}
+
+      public override Type Type{get {return typeof(decimal);}}
+    
+       public override BoundNodeKind Kind
+        {
+          get{return BoundNodeKind.MathExpression;}
+        }
+
+    }
+
     internal enum BoundBinaryOperatorKind
     {
       Adition,
       Substraction,
       Multiplication,
 
+      Concatenar,
+
+      OperadorPotencia,
+
       Division,
+
+      ComparacionMayor ,
+      ComparacionMenor ,
+      ComparacionMayorIgual ,
+      ComparacionMenorIgual ,
 
       Igual,
 
@@ -276,6 +314,8 @@ namespace Project.Binding
 
       OLogico,
       YLogico,
+
+      RestoDivision,
 
     }
 
@@ -388,12 +428,12 @@ internal sealed class BoundIfExpression : BoundExpression
     internal sealed class Binder 
     {
        private readonly List<string > diagnostics = new List<string>();
-       public   Dictionary <string,BoundExpression > _variables ;
+      //  public   Dictionary <string,BoundExpression > _variables ;
 
-       public Binder (Dictionary <string , BoundExpression> variables)
-       {
-        _variables =variables;
-       }
+      //  public Binder (Dictionary <string , BoundExpression> variables)
+      //  {
+      //   _variables =variables;
+      //  }
 
        public IEnumerable <string>  Diagnostics (List<string > diagnostics)
        {
@@ -408,6 +448,8 @@ internal sealed class BoundIfExpression : BoundExpression
 
         switch (syntax.Kind)
         {
+          case Token.TokenType.OperadorFuncionSimple:
+          return BindMathExpression((MathExpression)syntax);
           case Token.TokenType.PrintExpression:
           return BindPrintExpression((PrintExpression)syntax);
           case Token.TokenType.Numero :
@@ -481,15 +523,21 @@ internal sealed class BoundIfExpression : BoundExpression
         var boundleft=BindExpression(syntax.Left);
         var boundRight = BindExpression (syntax.Right);
 
+
         if(boundleft.Kind==BoundNodeKind.VariableExpression || boundRight.Kind==BoundNodeKind.VariableExpression)
         {
-          var boundOperator=BoundBinaryOperator.Bind(syntax.Operador.Kind , typeof(int) , typeof(int) );
+          var boundOperator=BoundBinaryOperator.Bind(syntax.Operador.Kind , typeof(decimal) , typeof(decimal) );
+          return new BoundBinaryExpression (boundleft , boundOperator, boundRight);
+        }
+        else if(boundleft.Kind==BoundNodeKind.FuncionCallExpression||boundRight.Kind==BoundNodeKind.FuncionCallExpression)
+        {
+          var boundOperator=BoundBinaryOperator.Bind(syntax.Operador.Kind , typeof(decimal) , typeof(decimal) );
           return new BoundBinaryExpression (boundleft , boundOperator, boundRight);
         }
         else
         {
-         var boundOperator = BoundBinaryOperator.Bind(syntax.Operador.Kind , boundleft.Type , boundRight.Type);
-         return new BoundBinaryExpression (boundleft , boundOperator, boundRight);
+          var boundOperator = BoundBinaryOperator.Bind(syntax.Operador.Kind , boundleft.Type , boundRight.Type);
+          return new BoundBinaryExpression (boundleft , boundOperator, boundRight);
         }
        
  
@@ -522,6 +570,16 @@ internal sealed class BoundIfExpression : BoundExpression
 
          return new BoundFuncionExpression(nombre,parametros,body);
 
+      }
+
+
+      private BoundExpression BindMathExpression(MathExpression syntax)
+      {
+
+         var identifier=syntax.Identificador.Value;
+         var expression =BindExpression(syntax.Expression);
+
+         return new BoundMathExpression(identifier,expression);
       }
 
       private BoundExpression BindCallFuncionExpression(CallFuncionExpression syntax)
@@ -557,30 +615,32 @@ internal sealed class BoundIfExpression : BoundExpression
          var name = syntax.Identifier.Value;
          var boundExpression = BindExpression(syntax.Expression);
 
-         var defaultvalue =
-         boundExpression.Type == typeof(int)
-         ? (object)0
-         :boundExpression.Type==typeof(bool)
-         ?(object)false
-         :null;
-
-         if(defaultvalue==null)
-         {
-          throw new Exception ($"Unsupported variable type : {boundExpression.Type}");
-         }
-         
-         _variables.Add(name , boundExpression);
+  // // if(_variables.ContainsKey(name))
+  // //        {
+  // //         _variables[name]=boundExpression;
+  // //        }
+  // //        else
+  //        _variables.Add(name , boundExpression);
 
          return  new BoundAssignmentExpression(name  , boundExpression);
         
       }
 
       private BoundExpression BindInExpression (InExpression syntax)
-      {
-         var _variable = BindAssignmentExpression(syntax.Variable);
+      {  
+
+        List<BoundExpression> variables = new List<BoundExpression>();
+
+        foreach (var item in syntax.Variables)
+        {
+          var _variable = BindExpression(item);
+          variables.Add(_variable);
+
+        }
+         
          var boundExpression = BindExpression(syntax.Expression);
 
-         return  new BoundInExpression((BoundAssignmentExpression)_variable , Token.TokenType.OperadorPob, boundExpression);
+         return  new BoundInExpression(variables, Token.TokenType.OperadorPob, boundExpression);
         
       }
 
@@ -669,14 +729,14 @@ internal sealed class BoundIfExpression : BoundExpression
 
       internal sealed class BoundInExpression : BoundExpression
       {
-        public BoundInExpression(BoundAssignmentExpression variable  , Token.TokenType operadorin , BoundExpression expression)
+        public BoundInExpression(List<BoundExpression> variables  , Token.TokenType operadorin , BoundExpression expression)
         {
-          Variable = variable;
+          Variables = variables;
           OperadorIn = operadorin;
           _Expression = expression;
         }
 
-        public BoundAssignmentExpression Variable {get;}
+        public List<BoundExpression> Variables {get;}
        
         public Token.TokenType OperadorIn{get;}
         public BoundExpression _Expression{get;}
