@@ -59,7 +59,6 @@ namespace Project.Binding
      
        if(root is BoundBinaryExpression b )
        {
-          
           dynamic left =  EvaluateExpression ( b.Left);
           dynamic right = EvaluateExpression (b.Right);
  
@@ -159,6 +158,7 @@ namespace Project.Binding
        if(root is BoundFuncionExpression w)
        {
            Funciones.Add(w.Name.Value , w);
+           
            return null;
            
        }
