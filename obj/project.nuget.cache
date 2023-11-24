@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "oQ/U27BKIachL7AzjYotyGKX9uMPYr+xcTTA4FwUzGWkWssXH4EaEC71Qm9WMxI6Uj9cWG/rizPXjf1rHdEvIQ==",
+  "dgSpecHash": "kmjZsDVuQT5zNkMTh7kimL3NsPjyFcGYHrFVtZm1o68V6AUYy3gvtLCgUBcRMnCkBeMnBEPHpAYJGCiMCGvxWA==",
   "success": true,
-  "projectFilePath": "C:\\JM\\PROYECTO__\\Interprete-de-Lenguaje-HULK-master\\Hola.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "/home/arkye/Interprete-de-Lenguaje-HULK/Hola.csproj",
+  "expectedPackageFiles": [
+    "/home/arkye/.nuget/packages/microsoft.aspnetcore.app.ref/7.0.13/microsoft.aspnetcore.app.ref.7.0.13.nupkg.sha512"
+  ],
   "logs": []
 }

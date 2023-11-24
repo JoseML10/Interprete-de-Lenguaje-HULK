@@ -4,7 +4,7 @@ using System.Diagnostics.SymbolStore;
 using System.Reflection.Emit;
 using System.Xml;
 using System.Security.Principal;
-using System ;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,10 +18,10 @@ using System.Collections.Specialized;
 
 namespace Project.Binding
 {
-   internal enum BoundNodeKind 
-   {
- 
-    Cadena ,
+  internal enum BoundNodeKind
+  {
+
+    Cadena,
 
     PrintExpression,
     UnaryExpression,
@@ -41,112 +41,113 @@ namespace Project.Binding
 
     IfExpression,
 
-   }
+  }
 
-   internal abstract class BoundNode
-   {
-    public abstract BoundNodeKind Kind {get;}
-   } 
+  internal abstract class BoundNode
+  {
+    public abstract BoundNodeKind Kind { get; }
+  }
 
-   internal abstract class BoundExpression : BoundNode
-   {
-     public abstract Type Type {get;}
-     
-   }
+  internal abstract class BoundExpression : BoundNode
+  {
+    public abstract Type Type { get; }
 
-   internal enum BoundUnaryOperatorKind
-   {
+  }
+
+  internal enum BoundUnaryOperatorKind
+  {
     Identity,
     Negation,
 
     NegacionLogica,
-   }
-    
-    internal sealed class BoundCadenaExpression:BoundExpression
+  }
+
+  internal sealed class BoundCadenaExpression : BoundExpression
+  {
+
+    public BoundCadenaExpression(string cadena)
     {
+      Cadena = cadena;
+    }
 
-      public BoundCadenaExpression(string cadena )
-      {
-        Cadena = cadena; 
-      }
+    public string Cadena { get; }
 
-      public string  Cadena {get;}
+    public override BoundNodeKind Kind { get { return BoundNodeKind.Cadena; } }
 
-      public override BoundNodeKind Kind {get{return BoundNodeKind.Cadena;}}
+    public override Type Type { get { return typeof(string); } }
 
-      public override Type Type {get{return typeof(string);}}
 
+  }
+
+
+  internal sealed class BoundPrintExpression : BoundExpression
+  {
+    public BoundPrintExpression(BoundExpression expression)
+    {
+      Expression = expression;
 
     }
 
+    public BoundExpression Expression { get; }
 
-    internal sealed class BoundPrintExpression : BoundExpression
+    public override BoundNodeKind Kind { get { return BoundNodeKind.PrintExpression; } }
+
+    public override Type Type { get { return Expression.Type; } }
+
+  }
+  internal sealed class BoundVariableExpression : BoundExpression
+  {
+    public BoundVariableExpression(string name, Type type)
     {
-       public BoundPrintExpression(BoundExpression expression )
-       {
-           Expression = expression  ;
-
-       }
-
-       public BoundExpression Expression {get;}
-
-       public override BoundNodeKind Kind {get{return BoundNodeKind.PrintExpression;}}
-
-      public override Type Type {get{return Expression.Type;}}
-
-    }
-    internal sealed class BoundVariableExpression : BoundExpression
-    {   
-      public BoundVariableExpression(string name , Type type)
-      {
-         Name = name ;
-         Type=type;
-      }
-
-    
-       public string Name {get;}
-       public override Type Type {get;}
-
-       public override BoundNodeKind Kind 
-       {
-        get{return BoundNodeKind.VariableExpression;}
-       }
-
-
-    }
-    internal sealed class BoundLiteralExpression : BoundExpression
-    {
-
-      public BoundLiteralExpression(object value)
-      {
-        Value=value;
-      }
-
-      public object Value {get;}
-        public override BoundNodeKind Kind 
-        {
-          get{return BoundNodeKind.NumberExpression;}}
-    
-
-        public override Type Type
-        {
-          get{return Value.GetType();}
-        }
+      Name = name;
+      Type = type;
     }
 
-   internal class BoundUnaryOperator
-   {
-    public BoundUnaryOperator ( Token.TokenType syntaxkind , BoundUnaryOperatorKind kind , Type operandType)
-    : this ( syntaxkind ,kind , operandType , operandType)
+
+    public string Name { get; }
+    public override Type Type { get; }
+
+    public override BoundNodeKind Kind
+    {
+      get { return BoundNodeKind.VariableExpression; }
+    }
+
+
+  }
+  internal sealed class BoundLiteralExpression : BoundExpression
+  {
+
+    public BoundLiteralExpression(object value)
+    {
+      Value = value;
+    }
+
+    public object Value { get; }
+    public override BoundNodeKind Kind
+    {
+      get { return BoundNodeKind.NumberExpression; }
+    }
+
+
+    public override Type Type
+    {
+      get { return Value.GetType(); }
+    }
+  }
+
+  internal class BoundUnaryOperator
+  {
+    public BoundUnaryOperator(Token.TokenType syntaxkind, BoundUnaryOperatorKind kind, Type operandType)
+    : this(syntaxkind, kind, operandType, operandType)
     {
     }
-    
 
-     public BoundUnaryOperator ( Token.TokenType syntaxkind , BoundUnaryOperatorKind kind , Type operandType , Type resulttype)
+
+    public BoundUnaryOperator(Token.TokenType syntaxkind, BoundUnaryOperatorKind kind, Type operandType, Type resulttype)
     {
-      SyntaxKind = syntaxkind ;
-      Kind=kind;
-      OperandType =operandType;
+      SyntaxKind = syntaxkind;
+      Kind = kind;
+      OperandType = operandType;
       ResultType = resulttype;
 
     }
@@ -159,11 +160,11 @@ namespace Project.Binding
       new BoundUnaryOperator(Token.TokenType.Negacion, BoundUnaryOperatorKind.NegacionLogica, typeof(bool)),
     };
 
-    public static BoundUnaryOperator Bind(Token.TokenType type , Type operandtype)
+    public static BoundUnaryOperator Bind(Token.TokenType type, Type operandtype)
     {
-      foreach ( var op in operadores )
+      foreach (var op in operadores)
       {
-        if(op.SyntaxKind==type && op.OperandType==operandtype)
+        if (op.SyntaxKind == type && op.OperandType == operandtype)
         {
           return op;
         }
@@ -173,29 +174,29 @@ namespace Project.Binding
     }
 
 
-    public Token.TokenType SyntaxKind {get;}
-    public BoundUnaryOperatorKind Kind  {get;}
-    public Type OperandType {get;}
-    public Type ResultType  {get;}
-   }
+    public Token.TokenType SyntaxKind { get; }
+    public BoundUnaryOperatorKind Kind { get; }
+    public Type OperandType { get; }
+    public Type ResultType { get; }
+  }
 
-   internal class BoundBinaryOperator
-   {
-  
-     public BoundBinaryOperator ( Token.TokenType syntaxkind , BoundBinaryOperatorKind kind , Type type):this
-     (syntaxkind , kind , type , type , type )
-     {}
+  internal class BoundBinaryOperator
+  {
 
-     public BoundBinaryOperator ( Token.TokenType syntaxkind , BoundBinaryOperatorKind kind , Type operandtype , Type resulttype):this
-     (syntaxkind , kind , operandtype , operandtype ,resulttype )
-     {}
+    public BoundBinaryOperator(Token.TokenType syntaxkind, BoundBinaryOperatorKind kind, Type type) : this
+    (syntaxkind, kind, type, type, type)
+    { }
 
-     public BoundBinaryOperator ( Token.TokenType syntaxkind , BoundBinaryOperatorKind kind , Type lefttype , Type rightype , Type resulttype)
+    public BoundBinaryOperator(Token.TokenType syntaxkind, BoundBinaryOperatorKind kind, Type operandtype, Type resulttype) : this
+    (syntaxkind, kind, operandtype, operandtype, resulttype)
+    { }
+
+    public BoundBinaryOperator(Token.TokenType syntaxkind, BoundBinaryOperatorKind kind, Type lefttype, Type rightype, Type resulttype)
     {
-      SyntaxKind = syntaxkind ;
-      Kind=kind;
+      SyntaxKind = syntaxkind;
+      Kind = kind;
       LeftType = lefttype;
-      RigthType =rightype;
+      RigthType = rightype;
       ResultType = resulttype;
 
     }
@@ -219,14 +220,15 @@ namespace Project.Binding
       new BoundBinaryOperator(Token.TokenType.OperadorComparacionMayorIgual, BoundBinaryOperatorKind.ComparacionMayorIgual, typeof(decimal) , typeof(bool)),
       new BoundBinaryOperator(Token.TokenType.OperadorComparacionMenor, BoundBinaryOperatorKind.ComparacionMenor, typeof(decimal) ,typeof(bool)),
       new BoundBinaryOperator(Token.TokenType.OperadorComparacionMenorIgual, BoundBinaryOperatorKind.ComparacionMenorIgual,typeof(decimal) ,typeof(bool)),
+      new BoundBinaryOperator(Token.TokenType.OperadorConcat, BoundBinaryOperatorKind.Concatenar, typeof(decimal)),
     };
 
-    public static BoundBinaryOperator Bind(Token.TokenType type , Type lefttype , Type rigthtype)
+    public static BoundBinaryOperator Bind(Token.TokenType type, Type lefttype, Type rigthtype)
     {
-    
-      foreach ( var op in operadores )
+
+      foreach (var op in operadores)
       {
-        if(op.SyntaxKind==type && op.LeftType==lefttype && op.RigthType==rigthtype)
+        if (op.SyntaxKind == type && op.LeftType == lefttype && op.RigthType == rigthtype)
         {
           return op;
         }
@@ -237,517 +239,517 @@ namespace Project.Binding
     }
 
 
-    public Token.TokenType SyntaxKind {get;}
-    public BoundBinaryOperatorKind Kind  {get;}
-    public Type LeftType {get;}
-    public Type RigthType {get;}
+    public Token.TokenType SyntaxKind { get; }
+    public BoundBinaryOperatorKind Kind { get; }
+    public Type LeftType { get; }
+    public Type RigthType { get; }
 
-    public Type ResultType  {get;}
-   }
-    internal sealed class BoundUnaryExpression : BoundExpression
-   {
-      public BoundUnaryExpression(BoundUnaryOperator operatorKind , BoundExpression operand)
-      {
-        Op = operatorKind;
-        Operand = operand;
-
-      }
-      
-      public BoundUnaryOperator Op {get;}
-      public BoundExpression Operand {get;}
-
-      public override Type Type
-      {
-        get {return Op.ResultType;}
-
-      }
-
-        public override BoundNodeKind Kind
-        {
-          get{return BoundNodeKind.UnaryExpression;}
-        }
-
-    }
-
-
-     internal sealed class BoundMathExpression : BoundExpression
-   {
-      public BoundMathExpression(string identifier , BoundExpression expression)
-      {
-        Identifier = identifier ;
-        Expression = expression;
-
-      }
-      
-      public string Identifier {get;}
-      public BoundExpression Expression {get;}
-
-      public override Type Type{get {return typeof(decimal);}}
-    
-       public override BoundNodeKind Kind
-        {
-          get{return BoundNodeKind.MathExpression;}
-        }
-
-    }
-
-    internal enum BoundBinaryOperatorKind
+    public Type ResultType { get; }
+  }
+  internal sealed class BoundUnaryExpression : BoundExpression
+  {
+    public BoundUnaryExpression(BoundUnaryOperator operatorKind, BoundExpression operand)
     {
-      Adition,
-      Substraction,
-      Multiplication,
-
-      Concatenar,
-
-      OperadorPotencia,
-
-      Division,
-
-      ComparacionMayor ,
-      ComparacionMenor ,
-      ComparacionMayorIgual ,
-      ComparacionMenorIgual ,
-
-      Igual,
-
-      Distinto,
-
-      OLogico,
-      YLogico,
-
-      RestoDivision,
+      Op = operatorKind;
+      Operand = operand;
 
     }
 
-    internal sealed class BoundBinaryExpression  : BoundExpression
+    public BoundUnaryOperator Op { get; }
+    public BoundExpression Operand { get; }
+
+    public override Type Type
     {
-      public BoundBinaryExpression(BoundExpression left , BoundBinaryOperator op , BoundExpression right)
-       {
-        Left=left;
-        Op =op ;
-        Right =right;
-       }
+      get { return Op.ResultType; }
 
-      
-       
-       public BoundExpression Left{get;}
-
-       public BoundBinaryOperator Op {get;}
-       public BoundExpression Right {get;}
-
-        public override BoundNodeKind Kind 
-        {
-          get{return BoundNodeKind.BinaryExpression;}
-        }
-
-        public override Type Type 
-        {
-          get{return Op.ResultType;}
-        }
     }
-    
 
-internal sealed class BoundFuncionExpression : BoundExpression
-{
-
-public BoundFuncionExpression( Token name , List<Token> parametros , BoundExpression body)
-{
-  Name=name;
-  Parametros = parametros;
-  Body=body;
-
-}
-
-public Token Name{get;}
-public List<Token> Parametros {get;}
-public BoundExpression Body {get;}
-
-public override BoundNodeKind Kind 
-  {
-    get{return BoundNodeKind.FuncionExpression;}
-  }
-
-  public override Type Type{get;}
-
-}
-
-internal sealed class BoundCallFuncionExpression : BoundExpression
-{
-
-public BoundCallFuncionExpression( Token name , List<BoundExpression> parametros )
-{
-  Name=name;
-  Parametros = parametros;
-
-
-}
-
-public Token Name{get;}
-public List<BoundExpression> Parametros {get;}
-
-public override BoundNodeKind Kind 
-  {
-    get{return BoundNodeKind.FuncionCallExpression;}
-  }
-
-  public override Type Type{get;}
-
-}
-
-
-internal sealed class BoundIfExpression : BoundExpression 
-{
-
-  public BoundIfExpression ( BoundExpression condicion  , BoundExpression thenEx,  BoundExpression elsecond)
-  {
-    
-    Condicion=condicion;
-    ThenEx=thenEx;
-    ElseCond=elsecond;
-
-  }
-
-
-  public BoundExpression Condicion {get;}
-
-  public BoundExpression ThenEx{get;}
-
-  public BoundExpression ElseCond{get;}
-
-
-  public override BoundNodeKind Kind 
-  {
-    get{return BoundNodeKind.IfExpression;}
-  }
-
-  public override Type Type{get;}
-
-}
-
-
-    internal sealed class Binder 
+    public override BoundNodeKind Kind
     {
-       private readonly List<string > diagnostics = new List<string>();
-      //  public   Dictionary <string,BoundExpression > _variables ;
+      get { return BoundNodeKind.UnaryExpression; }
+    }
 
-      //  public Binder (Dictionary <string , BoundExpression> variables)
-      //  {
-      //   _variables =variables;
-      //  }
+  }
 
-       public IEnumerable <string>  Diagnostics (List<string > diagnostics)
-       {
-        foreach ( string j in diagnostics)
+
+  internal sealed class BoundMathExpression : BoundExpression
+  {
+    public BoundMathExpression(string identifier, BoundExpression expression)
+    {
+      Identifier = identifier;
+      Expression = expression;
+
+    }
+
+    public string Identifier { get; }
+    public BoundExpression Expression { get; }
+
+    public override Type Type { get { return typeof(decimal); } }
+
+    public override BoundNodeKind Kind
+    {
+      get { return BoundNodeKind.MathExpression; }
+    }
+
+  }
+
+  internal enum BoundBinaryOperatorKind
+  {
+    Adition,
+    Substraction,
+    Multiplication,
+
+    Concatenar,
+
+    OperadorPotencia,
+
+    Division,
+
+    ComparacionMayor,
+    ComparacionMenor,
+    ComparacionMayorIgual,
+    ComparacionMenorIgual,
+
+    Igual,
+
+    Distinto,
+
+    OLogico,
+    YLogico,
+
+    RestoDivision,
+
+  }
+
+  internal sealed class BoundBinaryExpression : BoundExpression
+  {
+    public BoundBinaryExpression(BoundExpression left, BoundBinaryOperator op, BoundExpression right)
+    {
+      Left = left;
+      Op = op;
+      Right = right;
+    }
+
+
+
+    public BoundExpression Left { get; }
+
+    public BoundBinaryOperator Op { get; }
+    public BoundExpression Right { get; }
+
+    public override BoundNodeKind Kind
+    {
+      get { return BoundNodeKind.BinaryExpression; }
+    }
+
+    public override Type Type
+    {
+      get { return Op.ResultType; }
+    }
+  }
+
+
+  internal sealed class BoundFuncionExpression : BoundExpression
+  {
+
+    public BoundFuncionExpression(Token name, List<Token> parametros, BoundExpression body)
+    {
+      Name = name;
+      Parametros = parametros;
+      Body = body;
+
+    }
+
+    public Token Name { get; }
+    public List<Token> Parametros { get; }
+    public BoundExpression Body { get; }
+
+    public override BoundNodeKind Kind
+    {
+      get { return BoundNodeKind.FuncionExpression; }
+    }
+
+    public override Type Type { get; }
+
+  }
+
+  internal sealed class BoundCallFuncionExpression : BoundExpression
+  {
+
+    public BoundCallFuncionExpression(Token name, List<BoundExpression> parametros)
+    {
+      Name = name;
+      Parametros = parametros;
+
+
+    }
+
+    public Token Name { get; }
+    public List<BoundExpression> Parametros { get; }
+
+    public override BoundNodeKind Kind
+    {
+      get { return BoundNodeKind.FuncionCallExpression; }
+    }
+
+    public override Type Type { get; }
+
+  }
+
+
+  internal sealed class BoundIfExpression : BoundExpression
+  {
+
+    public BoundIfExpression(BoundExpression condicion, BoundExpression thenEx, BoundExpression elsecond)
+    {
+
+      Condicion = condicion;
+      ThenEx = thenEx;
+      ElseCond = elsecond;
+
+    }
+
+
+    public BoundExpression Condicion { get; }
+
+    public BoundExpression ThenEx { get; }
+
+    public BoundExpression ElseCond { get; }
+
+
+    public override BoundNodeKind Kind
+    {
+      get { return BoundNodeKind.IfExpression; }
+    }
+
+    public override Type Type { get; }
+
+  }
+
+
+  internal sealed class Binder
+  {
+    private readonly List<string> diagnostics = new List<string>();
+    //  public   Dictionary <string,BoundExpression > _variables ;
+
+    //  public Binder (Dictionary <string , BoundExpression> variables)
+    //  {
+    //   _variables =variables;
+    //  }
+
+    public IEnumerable<string> Diagnostics(List<string> diagnostics)
+    {
+      foreach (string j in diagnostics)
         yield return j;
-       }
+    }
 
 
 
-      public BoundExpression BindExpression(Expression syntax)
+    public BoundExpression BindExpression(Expression syntax)
+    {
+
+      switch (syntax.Kind)
       {
-
-        switch (syntax.Kind)
-        {
-          case Token.TokenType.OperadorFuncionSimple:
+        case Token.TokenType.OperadorFuncionSimple:
           return BindMathExpression((MathExpression)syntax);
-          case Token.TokenType.PrintExpression:
+        case Token.TokenType.PrintExpression:
           return BindPrintExpression((PrintExpression)syntax);
-          case Token.TokenType.Numero :
+        case Token.TokenType.Numero:
           return BindNumberExpression((NumberToken)syntax);
-          case Token.TokenType.ExpresionUnaria:
+        case Token.TokenType.ExpresionUnaria:
           return BindUnaryExpression((UnaryExpression)syntax);
-          case Token.TokenType.IfExpression:
+        case Token.TokenType.IfExpression:
           return BindIfExpression((IfExpression)syntax);
-          case Token.TokenType.Cadena:
+        case Token.TokenType.Cadena:
           return BindCadenaExpression((StringExpression)syntax);
-          case Token.TokenType.ExpresionFuncion:
+        case Token.TokenType.ExpresionFuncion:
           return BindFuncionExpression((FuncionExpression)syntax);
-          case Token.TokenType.LlamadaFuncion:
+        case Token.TokenType.LlamadaFuncion:
           return BindCallFuncionExpression((CallFuncionExpression)syntax);
-          case Token.TokenType.ExpresionBinaria :
+        case Token.TokenType.ExpresionBinaria:
           return BindBinaryExpression((BinaryExpression)syntax);
-          case Token.TokenType.ExpresionParentesis :
+        case Token.TokenType.ExpresionParentesis:
           return BindParentesisExpression((ExpresionParentesis)syntax);
-          case Token.TokenType.AssignmentExpression :
+        case Token.TokenType.AssignmentExpression:
           return BindAssignmentExpression((AssignmentExpression)syntax);
-          case Token.TokenType.NameExpression :
+        case Token.TokenType.NameExpression:
           return BindNameExpression((NameExpression)syntax);
-          case Token.TokenType.InExpression :
+        case Token.TokenType.InExpression:
           return BindInExpression((InExpression)syntax);
 
 
-          default : throw new Exception ($"Unexpected syntax {syntax.Kind}");
+        default: throw new Exception($"Unexpected syntax {syntax.Kind}");
 
-        }
       }
+    }
 
-      private BoundExpression BindNumberExpression (NumberToken syntax)
+    private BoundExpression BindNumberExpression(NumberToken syntax)
+    {
+      var value = syntax.Value;
+      return new BoundLiteralExpression(value);
+    }
+
+    private BoundExpression BindUnaryExpression(UnaryExpression syntax)
+    {
+      var boundOperand = BindExpression(syntax.Operando);
+      var boundOperator = BoundUnaryOperator.Bind(syntax.Operador.Kind, boundOperand.Type);
+
+      if (boundOperator == null)
       {
-        var value = syntax.Value;
-        return new BoundLiteralExpression(value);
+        diagnostics.Add($"Unary Operator {syntax.Operador} is not definied for type {boundOperand.Type}");
+        return boundOperand;
       }
-
-      private BoundExpression BindUnaryExpression ( UnaryExpression syntax)
-      {
-        var boundOperand = BindExpression(syntax.Operando);
-        var boundOperator = BoundUnaryOperator.Bind(syntax.Operador.Kind , boundOperand.Type);
-
-        if(boundOperator ==null)
-        {
-          diagnostics.Add($"Unary Operator {syntax.Operador } is not definied for type {boundOperand.Type}");
-          return boundOperand ;
-        }
-        return new BoundUnaryExpression ( boundOperator  , boundOperand);
-      }
+      return new BoundUnaryExpression(boundOperator, boundOperand);
+    }
 
 
-      private BoundExpression BindCadenaExpression(StringExpression syntax)
-      {
-         string  cadena = syntax.Value;
-         ;
+    private BoundExpression BindCadenaExpression(StringExpression syntax)
+    {
+      string cadena = syntax.Value;
+      ;
 
-         return new BoundCadenaExpression(cadena);
-
-      }
-
-      private BoundExpression BindPrintExpression(PrintExpression syntax)
-      {
-         var expression = BindExpression(syntax.Expresion);
-
-         return new BoundPrintExpression(expression);
-
-      }
-
-      private BoundExpression BindBinaryExpression (BinaryExpression syntax)
-      {
-        var boundleft=BindExpression(syntax.Left);
-        var boundRight = BindExpression (syntax.Right);
-
-
-        if(boundleft.Kind==BoundNodeKind.VariableExpression || boundRight.Kind==BoundNodeKind.VariableExpression)
-        {
-          var boundOperator=BoundBinaryOperator.Bind(syntax.Operador.Kind , typeof(decimal) , typeof(decimal) );
-          return new BoundBinaryExpression (boundleft , boundOperator, boundRight);
-        }
-        else if(boundleft.Kind==BoundNodeKind.FuncionCallExpression||boundRight.Kind==BoundNodeKind.FuncionCallExpression)
-        {
-          var boundOperator=BoundBinaryOperator.Bind(syntax.Operador.Kind , typeof(decimal) , typeof(decimal) );
-          return new BoundBinaryExpression (boundleft , boundOperator, boundRight);
-        }
-        else
-        {
-          var boundOperator = BoundBinaryOperator.Bind(syntax.Operador.Kind , boundleft.Type , boundRight.Type);
-          return new BoundBinaryExpression (boundleft , boundOperator, boundRight);
-        }
-       
- 
-      }
-
-      private BoundExpression BindParentesisExpression (ExpresionParentesis syntax)
-      {
-        
-        return BindExpression (syntax.Expresion);
-
-      }
-
-      private BoundExpression BindNameExpression (NameExpression syntax)
-      {
-
-        var name = syntax.Identifier.Value;
-
-        var type = GetType();
-        return new BoundVariableExpression (name , type );
-
-        
-      }
-
-
-      private BoundExpression BindFuncionExpression(FuncionExpression syntax)
-      {
-         var nombre = syntax.Name;
-         List<Token> parametros = syntax.Parameters;
-         var body = BindExpression(syntax.Body);
-
-         return new BoundFuncionExpression(nombre,parametros,body);
-
-      }
-
-
-      private BoundExpression BindMathExpression(MathExpression syntax)
-      {
-
-         var identifier=syntax.Identificador.Value;
-         var expression =BindExpression(syntax.Expression);
-
-         return new BoundMathExpression(identifier,expression);
-      }
-
-      private BoundExpression BindCallFuncionExpression(CallFuncionExpression syntax)
-      {
-         var name = syntax.Name;
-         List<BoundExpression> argumentos = new List<BoundExpression>();
-
-         foreach(var item in syntax.Argumentos)
-         {
-            var process = BindExpression(item);
-            argumentos.Add(process);
-
-         }
-
-         return new BoundCallFuncionExpression(name , argumentos);
-
-
-
-      }
-      private BoundExpression BindIfExpression (IfExpression syntax)
-      {
-
-         var condicion = BindExpression(syntax.Condicion);
-         var thenEx =BindExpression(syntax.ThenEx);
-         var elsecond =BindExpression(syntax.ElseCond);
-
-         return new BoundIfExpression(condicion , thenEx ,  elsecond);
-
-      }
-
-      private BoundExpression BindAssignmentExpression (AssignmentExpression syntax)
-      {
-         var name = syntax.Identifier.Value;
-         var boundExpression = BindExpression(syntax.Expression);
-
-  // // if(_variables.ContainsKey(name))
-  // //        {
-  // //         _variables[name]=boundExpression;
-  // //        }
-  // //        else
-  //        _variables.Add(name , boundExpression);
-
-         return  new BoundAssignmentExpression(name  , boundExpression);
-        
-      }
-
-      private BoundExpression BindInExpression (InExpression syntax)
-      {  
-
-        List<BoundExpression> variables = new List<BoundExpression>();
-
-        foreach (var item in syntax.Variables)
-        {
-          var _variable = BindExpression(item);
-          variables.Add(_variable);
-
-        }
-         
-         var boundExpression = BindExpression(syntax.Expression);
-
-         return  new BoundInExpression(variables, Token.TokenType.OperadorPob, boundExpression);
-        
-      }
-
-      private BoundUnaryOperatorKind? BindUnaryOperatorKind(Token.TokenType kind , Type operandType  )
-      {
-        if(operandType==typeof(int))
-         switch (kind)
-        {
-          case Token.TokenType.OperadorSuma :
-          return BoundUnaryOperatorKind.Identity;
-          case Token.TokenType.OperadorResta :
-          return BoundUnaryOperatorKind.Negation;
-
-        }
-
-        if(operandType==typeof(bool))
-        {
-          switch (kind)
-          {
-            case Token.TokenType.Negacion :
-            return BoundUnaryOperatorKind.NegacionLogica;
-  
-          }
-        }
-        return null;
-
-       
-      }
-
-      private BoundBinaryOperatorKind? BindBinaryOperatorKind(Token.TokenType kind , Type leftType , Type righttype )
-      {
-  
-        if(leftType == typeof(int)||righttype == typeof(int))
-        {
-         
-            switch (kind)
-        {
-          case Token.TokenType.OperadorSuma :
-          return BoundBinaryOperatorKind.Adition;
-          case Token.TokenType.OperadorResta :
-          return BoundBinaryOperatorKind.Substraction;
-          case Token.TokenType.OperadorMult :
-          return BoundBinaryOperatorKind.Multiplication;
-          case Token.TokenType.OperadorDiv :
-          return BoundBinaryOperatorKind.Division;
-
-        }
-         
-        }
-
-        if(leftType==typeof(bool) && righttype==(typeof(bool)))
-        {
-          switch(kind)
-          {
-          case Token.TokenType.Disyuncion :
-          return BoundBinaryOperatorKind.YLogico;
-          case Token.TokenType.Conjuncion :
-          return BoundBinaryOperatorKind.OLogico;
-
-          }
-        }
-        
-
-        return null;
-         
-        
-        
-        
-      }
+      return new BoundCadenaExpression(cadena);
 
     }
-      internal sealed class BoundAssignmentExpression : BoundExpression
+
+    private BoundExpression BindPrintExpression(PrintExpression syntax)
+    {
+      var expression = BindExpression(syntax.Expresion);
+
+      return new BoundPrintExpression(expression);
+
+    }
+
+    private BoundExpression BindBinaryExpression(BinaryExpression syntax)
+    {
+      var boundleft = BindExpression(syntax.Left);
+      var boundRight = BindExpression(syntax.Right);
+
+
+      if (boundleft.Kind == BoundNodeKind.VariableExpression || boundRight.Kind == BoundNodeKind.VariableExpression)
       {
-        public BoundAssignmentExpression(string name , BoundExpression expression)
-        {
-          Name = name ; 
-          Expresion = expression;
-        }
-
-        public string Name {get;}
-        public BoundExpression Expresion{get;}
-
-        public override BoundNodeKind Kind {get{return BoundNodeKind.AssignmentExpression;}}
-        public override Type Type {get{return  Expresion.Type;}}
+        var boundOperator = BoundBinaryOperator.Bind(syntax.Operador.Kind, typeof(decimal), typeof(decimal));
+        return new BoundBinaryExpression(boundleft, boundOperator, boundRight);
+      }
+      else if (boundleft.Kind == BoundNodeKind.FuncionCallExpression || boundRight.Kind == BoundNodeKind.FuncionCallExpression)
+      {
+        var boundOperator = BoundBinaryOperator.Bind(syntax.Operador.Kind, typeof(decimal), typeof(decimal));
+        return new BoundBinaryExpression(boundleft, boundOperator, boundRight);
+      }
+      else
+      {
+        var boundOperator = BoundBinaryOperator.Bind(syntax.Operador.Kind, boundleft.Type, boundRight.Type);
+        return new BoundBinaryExpression(boundleft, boundOperator, boundRight);
       }
 
-      internal sealed class BoundInExpression : BoundExpression
+
+    }
+
+    private BoundExpression BindParentesisExpression(ExpresionParentesis syntax)
+    {
+
+      return BindExpression(syntax.Expresion);
+
+    }
+
+    private BoundExpression BindNameExpression(NameExpression syntax)
+    {
+
+      var name = syntax.Identifier.Value;
+
+      var type = GetType();
+      return new BoundVariableExpression(name, type);
+
+
+    }
+
+
+    private BoundExpression BindFuncionExpression(FuncionExpression syntax)
+    {
+      var nombre = syntax.Name;
+      List<Token> parametros = syntax.Parameters;
+      var body = BindExpression(syntax.Body);
+
+      return new BoundFuncionExpression(nombre, parametros, body);
+
+    }
+
+
+    private BoundExpression BindMathExpression(MathExpression syntax)
+    {
+
+      var identifier = syntax.Identificador.Value;
+      var expression = BindExpression(syntax.Expression);
+
+      return new BoundMathExpression(identifier, expression);
+    }
+
+    private BoundExpression BindCallFuncionExpression(CallFuncionExpression syntax)
+    {
+      var name = syntax.Name;
+      List<BoundExpression> argumentos = new List<BoundExpression>();
+
+      foreach (var item in syntax.Argumentos)
       {
-        public BoundInExpression(List<BoundExpression> variables  , Token.TokenType operadorin , BoundExpression expression)
+        var process = BindExpression(item);
+        argumentos.Add(process);
+
+      }
+
+      return new BoundCallFuncionExpression(name, argumentos);
+
+
+
+    }
+    private BoundExpression BindIfExpression(IfExpression syntax)
+    {
+
+      var condicion = BindExpression(syntax.Condicion);
+      var thenEx = BindExpression(syntax.ThenEx);
+      var elsecond = BindExpression(syntax.ElseCond);
+
+      return new BoundIfExpression(condicion, thenEx, elsecond);
+
+    }
+
+    private BoundExpression BindAssignmentExpression(AssignmentExpression syntax)
+    {
+      var name = syntax.Identifier.Value;
+      var boundExpression = BindExpression(syntax.Expression);
+
+      // // if(_variables.ContainsKey(name))
+      // //        {
+      // //         _variables[name]=boundExpression;
+      // //        }
+      // //        else
+      //        _variables.Add(name , boundExpression);
+
+      return new BoundAssignmentExpression(name, boundExpression);
+
+    }
+
+    private BoundExpression BindInExpression(InExpression syntax)
+    {
+
+      List<BoundExpression> variables = new List<BoundExpression>();
+
+      foreach (var item in syntax.Variables)
+      {
+        var _variable = BindExpression(item);
+        variables.Add(_variable);
+
+      }
+
+      var boundExpression = BindExpression(syntax.Expression);
+
+      return new BoundInExpression(variables, Token.TokenType.OperadorPob, boundExpression);
+
+    }
+
+    private BoundUnaryOperatorKind? BindUnaryOperatorKind(Token.TokenType kind, Type operandType)
+    {
+      if (operandType == typeof(int))
+        switch (kind)
         {
-          Variables = variables;
-          OperadorIn = operadorin;
-          _Expression = expression;
+          case Token.TokenType.OperadorSuma:
+            return BoundUnaryOperatorKind.Identity;
+          case Token.TokenType.OperadorResta:
+            return BoundUnaryOperatorKind.Negation;
+
         }
 
-        public List<BoundExpression> Variables {get;}
-       
-        public Token.TokenType OperadorIn{get;}
-        public BoundExpression _Expression{get;}
+      if (operandType == typeof(bool))
+      {
+        switch (kind)
+        {
+          case Token.TokenType.Negacion:
+            return BoundUnaryOperatorKind.NegacionLogica;
 
-        public override BoundNodeKind Kind {get{return BoundNodeKind.AssignmentExpression;}}
-        public override Type Type {get{return  _Expression.Type;}}
+        }
+      }
+      return null;
+
+
+    }
+
+    private BoundBinaryOperatorKind? BindBinaryOperatorKind(Token.TokenType kind, Type leftType, Type righttype)
+    {
+
+      if (leftType == typeof(int) || righttype == typeof(int))
+      {
+
+        switch (kind)
+        {
+          case Token.TokenType.OperadorSuma:
+            return BoundBinaryOperatorKind.Adition;
+          case Token.TokenType.OperadorResta:
+            return BoundBinaryOperatorKind.Substraction;
+          case Token.TokenType.OperadorMult:
+            return BoundBinaryOperatorKind.Multiplication;
+          case Token.TokenType.OperadorDiv:
+            return BoundBinaryOperatorKind.Division;
+
+        }
+
+      }
+
+      if (leftType == typeof(bool) && righttype == (typeof(bool)))
+      {
+        switch (kind)
+        {
+          case Token.TokenType.Disyuncion:
+            return BoundBinaryOperatorKind.YLogico;
+          case Token.TokenType.Conjuncion:
+            return BoundBinaryOperatorKind.OLogico;
+
+        }
       }
 
 
+      return null;
 
 
-  
+
+
+    }
+
+  }
+  internal sealed class BoundAssignmentExpression : BoundExpression
+  {
+    public BoundAssignmentExpression(string name, BoundExpression expression)
+    {
+      Name = name;
+      Expresion = expression;
+    }
+
+    public string Name { get; }
+    public BoundExpression Expresion { get; }
+
+    public override BoundNodeKind Kind { get { return BoundNodeKind.AssignmentExpression; } }
+    public override Type Type { get { return Expresion.Type; } }
+  }
+
+  internal sealed class BoundInExpression : BoundExpression
+  {
+    public BoundInExpression(List<BoundExpression> variables, Token.TokenType operadorin, BoundExpression expression)
+    {
+      Variables = variables;
+      OperadorIn = operadorin;
+      _Expression = expression;
+    }
+
+    public List<BoundExpression> Variables { get; }
+
+    public Token.TokenType OperadorIn { get; }
+    public BoundExpression _Expression { get; }
+
+    public override BoundNodeKind Kind { get { return BoundNodeKind.AssignmentExpression; } }
+    public override Type Type { get { return _Expression.Type; } }
+  }
+
+
+
+
+
 
 }

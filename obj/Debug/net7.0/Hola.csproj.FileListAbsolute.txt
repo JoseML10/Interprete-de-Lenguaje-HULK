@@ -1,30 +1,45 @@
-C:\Users\Jose Morales\Hola\obj\Debug\net7.0\Hola.csproj.AssemblyReference.cache
-C:\Users\Jose Morales\Hola\obj\Debug\net7.0\Hola.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\Jose Morales\Hola\obj\Debug\net7.0\Hola.AssemblyInfoInputs.cache
-C:\Users\Jose Morales\Hola\obj\Debug\net7.0\Hola.AssemblyInfo.cs
-C:\Users\Jose Morales\Hola\obj\Debug\net7.0\Hola.csproj.CoreCompileInputs.cache
-C:\Users\Jose Morales\Hola\bin\Debug\net7.0\Hola.exe
-C:\Users\Jose Morales\Hola\bin\Debug\net7.0\Hola.deps.json
-C:\Users\Jose Morales\Hola\bin\Debug\net7.0\Hola.runtimeconfig.json
-C:\Users\Jose Morales\Hola\bin\Debug\net7.0\Hola.dll
-C:\Users\Jose Morales\Hola\bin\Debug\net7.0\Hola.pdb
-C:\Users\Jose Morales\Hola\obj\Debug\net7.0\Hola.dll
-C:\Users\Jose Morales\Hola\obj\Debug\net7.0\refint\Hola.dll
-C:\Users\Jose Morales\Hola\obj\Debug\net7.0\Hola.pdb
-C:\Users\Jose Morales\Hola\obj\Debug\net7.0\Hola.genruntimeconfig.cache
-C:\Users\Jose Morales\Hola\obj\Debug\net7.0\ref\Hola.dll
-C:\JM\PROYECTO__\Interprete-de-Lenguaje-HULK-master\bin\Debug\net7.0\Hola.exe
-C:\JM\PROYECTO__\Interprete-de-Lenguaje-HULK-master\bin\Debug\net7.0\Hola.deps.json
-C:\JM\PROYECTO__\Interprete-de-Lenguaje-HULK-master\bin\Debug\net7.0\Hola.runtimeconfig.json
-C:\JM\PROYECTO__\Interprete-de-Lenguaje-HULK-master\bin\Debug\net7.0\Hola.dll
-C:\JM\PROYECTO__\Interprete-de-Lenguaje-HULK-master\bin\Debug\net7.0\Hola.pdb
-C:\JM\PROYECTO__\Interprete-de-Lenguaje-HULK-master\obj\Debug\net7.0\Hola.csproj.AssemblyReference.cache
-C:\JM\PROYECTO__\Interprete-de-Lenguaje-HULK-master\obj\Debug\net7.0\Hola.GeneratedMSBuildEditorConfig.editorconfig
-C:\JM\PROYECTO__\Interprete-de-Lenguaje-HULK-master\obj\Debug\net7.0\Hola.AssemblyInfoInputs.cache
-C:\JM\PROYECTO__\Interprete-de-Lenguaje-HULK-master\obj\Debug\net7.0\Hola.AssemblyInfo.cs
-C:\JM\PROYECTO__\Interprete-de-Lenguaje-HULK-master\obj\Debug\net7.0\Hola.csproj.CoreCompileInputs.cache
-C:\JM\PROYECTO__\Interprete-de-Lenguaje-HULK-master\obj\Debug\net7.0\Hola.dll
-C:\JM\PROYECTO__\Interprete-de-Lenguaje-HULK-master\obj\Debug\net7.0\refint\Hola.dll
-C:\JM\PROYECTO__\Interprete-de-Lenguaje-HULK-master\obj\Debug\net7.0\Hola.pdb
-C:\JM\PROYECTO__\Interprete-de-Lenguaje-HULK-master\obj\Debug\net7.0\Hola.genruntimeconfig.cache
-C:\JM\PROYECTO__\Interprete-de-Lenguaje-HULK-master\obj\Debug\net7.0\ref\Hola.dll
+C:/Users/Jose Morales/Hola/obj/Debug/net7.0/Hola.csproj.AssemblyReference.cache
+C:/Users/Jose Morales/Hola/obj/Debug/net7.0/Hola.GeneratedMSBuildEditorConfig.editorconfig
+C:/Users/Jose Morales/Hola/obj/Debug/net7.0/Hola.AssemblyInfoInputs.cache
+C:/Users/Jose Morales/Hola/obj/Debug/net7.0/Hola.AssemblyInfo.cs
+C:/Users/Jose Morales/Hola/obj/Debug/net7.0/Hola.csproj.CoreCompileInputs.cache
+C:/Users/Jose Morales/Hola/bin/Debug/net7.0/Hola.exe
+C:/Users/Jose Morales/Hola/bin/Debug/net7.0/Hola.deps.json
+C:/Users/Jose Morales/Hola/bin/Debug/net7.0/Hola.runtimeconfig.json
+C:/Users/Jose Morales/Hola/bin/Debug/net7.0/Hola.dll
+C:/Users/Jose Morales/Hola/bin/Debug/net7.0/Hola.pdb
+C:/Users/Jose Morales/Hola/obj/Debug/net7.0/Hola.dll
+C:/Users/Jose Morales/Hola/obj/Debug/net7.0/refint/Hola.dll
+C:/Users/Jose Morales/Hola/obj/Debug/net7.0/Hola.pdb
+C:/Users/Jose Morales/Hola/obj/Debug/net7.0/Hola.genruntimeconfig.cache
+C:/Users/Jose Morales/Hola/obj/Debug/net7.0/ref/Hola.dll
+C:/JM/PROYECTO__/Interprete-de-Lenguaje-HULK-master/bin/Debug/net7.0/Hola.exe
+C:/JM/PROYECTO__/Interprete-de-Lenguaje-HULK-master/bin/Debug/net7.0/Hola.deps.json
+C:/JM/PROYECTO__/Interprete-de-Lenguaje-HULK-master/bin/Debug/net7.0/Hola.runtimeconfig.json
+C:/JM/PROYECTO__/Interprete-de-Lenguaje-HULK-master/bin/Debug/net7.0/Hola.dll
+C:/JM/PROYECTO__/Interprete-de-Lenguaje-HULK-master/bin/Debug/net7.0/Hola.pdb
+C:/JM/PROYECTO__/Interprete-de-Lenguaje-HULK-master/obj/Debug/net7.0/Hola.csproj.AssemblyReference.cache
+C:/JM/PROYECTO__/Interprete-de-Lenguaje-HULK-master/obj/Debug/net7.0/Hola.GeneratedMSBuildEditorConfig.editorconfig
+C:/JM/PROYECTO__/Interprete-de-Lenguaje-HULK-master/obj/Debug/net7.0/Hola.AssemblyInfoInputs.cache
+C:/JM/PROYECTO__/Interprete-de-Lenguaje-HULK-master/obj/Debug/net7.0/Hola.AssemblyInfo.cs
+C:/JM/PROYECTO__/Interprete-de-Lenguaje-HULK-master/obj/Debug/net7.0/Hola.csproj.CoreCompileInputs.cache
+C:/JM/PROYECTO__/Interprete-de-Lenguaje-HULK-master/obj/Debug/net7.0/Hola.dll
+C:/JM/PROYECTO__/Interprete-de-Lenguaje-HULK-master/obj/Debug/net7.0/refint/Hola.dll
+C:/JM/PROYECTO__/Interprete-de-Lenguaje-HULK-master/obj/Debug/net7.0/Hola.pdb
+C:/JM/PROYECTO__/Interprete-de-Lenguaje-HULK-master/obj/Debug/net7.0/Hola.genruntimeconfig.cache
+C:/JM/PROYECTO__/Interprete-de-Lenguaje-HULK-master/obj/Debug/net7.0/ref/Hola.dll
+/home/arkye/Interprete-de-Lenguaje-HULK/bin/Debug/net7.0/Hola
+/home/arkye/Interprete-de-Lenguaje-HULK/bin/Debug/net7.0/Hola.deps.json
+/home/arkye/Interprete-de-Lenguaje-HULK/bin/Debug/net7.0/Hola.runtimeconfig.json
+/home/arkye/Interprete-de-Lenguaje-HULK/bin/Debug/net7.0/Hola.dll
+/home/arkye/Interprete-de-Lenguaje-HULK/bin/Debug/net7.0/Hola.pdb
+/home/arkye/Interprete-de-Lenguaje-HULK/obj/Debug/net7.0/Hola.csproj.AssemblyReference.cache
+/home/arkye/Interprete-de-Lenguaje-HULK/obj/Debug/net7.0/Hola.GeneratedMSBuildEditorConfig.editorconfig
+/home/arkye/Interprete-de-Lenguaje-HULK/obj/Debug/net7.0/Hola.AssemblyInfoInputs.cache
+/home/arkye/Interprete-de-Lenguaje-HULK/obj/Debug/net7.0/Hola.AssemblyInfo.cs
+/home/arkye/Interprete-de-Lenguaje-HULK/obj/Debug/net7.0/Hola.csproj.CoreCompileInputs.cache
+/home/arkye/Interprete-de-Lenguaje-HULK/obj/Debug/net7.0/Hola.dll
+/home/arkye/Interprete-de-Lenguaje-HULK/obj/Debug/net7.0/refint/Hola.dll
+/home/arkye/Interprete-de-Lenguaje-HULK/obj/Debug/net7.0/Hola.pdb
+/home/arkye/Interprete-de-Lenguaje-HULK/obj/Debug/net7.0/Hola.genruntimeconfig.cache
+/home/arkye/Interprete-de-Lenguaje-HULK/obj/Debug/net7.0/ref/Hola.dll
